@@ -8,3 +8,9 @@ https://github.com/aisstream/ais-message-models
 node_modules = openAI Generator
 다운로드 경로: https://openapi-generator.tech/
 * 자세한 설치방법은 생략.
+
+# venvs 경로에 라이브러리를 모두 설치하지 않은 이유:
+1. aisStream은 pip로 설치 불가
+    - python pip에서 지원하지 않는 모듈을 따로 구분하고 관리하기 위함.
+2. openAPI Generator는 Java 기반임. python으로도 사용가능하게끔 제공할뿐임.
+    - python 항목이 아니므로 따로 관리 필요.
