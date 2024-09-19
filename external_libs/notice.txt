@@ -1,0 +1,10 @@
+이곳은 외부 라이브러리를 보관하는 장소입니다.
+현재 제가 갖고 있는 외부 라이브러리는 다음과 같습니다.
+
+aisStream = aisStream API (asi-message-models 모델 포함)
+https://github.com/aisstream/ais-message-models
+* 자세한 설치방법은 생략.
+
+node_modules = openAI Generator
+다운로드 경로: https://openapi-generator.tech/
+* 자세한 설치방법은 생략.
