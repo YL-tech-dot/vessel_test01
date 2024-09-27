@@ -1,11 +1,11 @@
 # AidsToNavigationReport
 import asyncio
-
 import pandas as pd
 import websockets
 import json
-# from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta
 import os
+import AisFilter as AisF
 # import pandas as pd
 
 
@@ -35,12 +35,6 @@ def label(tag):
         return tag
     return None  # 일치하는 태그가 없으면 None 반환
 
-
-def printing(paper,name=""):
-    print("--start-------------------------------")
-    print(f"{name}    >>", paper)
-    print(f"{name}type>>", type(paper))
-    print("--end---------------------------------")
 
 def get_next_filename(base_name, extension, directory):
     if not os.path.exists(directory):
@@ -106,10 +100,10 @@ async def connect_ais_stream():
             ais_message = message['Message'].get(label(message_type))
 
             # Printing 함수들
-            printing(message, "message")
-            printing(message_type,"message_type")
-            printing(meta_data, "meta_data")
-            printing(ais_message, "ais_message")
+            AisF.printing(message, "message")
+            AisF.printing(message_type,"message_type")
+            AisF.printing(meta_data, "meta_data")
+            AisF.printing(ais_message, "ais_message")
 
             if ais_message:
                 if 'UserID' in ais_message:
@@ -132,24 +126,40 @@ async def connect_ais_stream():
 
 
         # export_to_txt(get_next_filename(base_name='messages_test', extension='.txt', directory='export_txt'), mount)
+        korea_time = datetime.now(timezone.utc) + timedelta(hours=9)
+        formatted_time = korea_time.isoformat()
 
         data_dict = {
-            'userID_lr': userid_lr,
-            'message_lr': message_lr,
-            'message_type_lr': message_type_lr,
-            'meta_data_lr': meta_data_lr,
+            'KOR_Time':userid_lr[:19],
+            'userID': userid_lr,
+            'message': message_lr,
+            'message_type': message_type_lr,
+            'meta_data': meta_data_lr,
         }
+
         base_name = "messages_needFilter"  # 기본 이름
         extension = ".csv"  # 파일 형식
         directory = "./export_csv"
+
+        'message': message_lr,
+        'message_type': message_type_lr,
+        'meta_data': meta_data_lr,
+
+
 
         df = pd.DataFrame(data_dict)
         df.to_csv(get_next_filename(base_name,extension, directory), index=True)
         print('export_csv 완료.')
 
 
+
+
 if __name__ == "__main__":
-    asyncio.run(connect_ais_stream())
+    api_key = ""
+    bounding_box = [[32.0,124.0]]
+    asyncio.run(connect_ais_stream(api_key, bounding_box ))
+
+
 
 #     print("=This is Printer===========================")
 #     print('formatted_time',formatted_time)
